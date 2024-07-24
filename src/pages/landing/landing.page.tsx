@@ -6,7 +6,6 @@ const LandingPage = (): ReactNode => {
     return (
         <>
             <HomeBannerComponent />
-            <h1>Hello Guys</h1>
         </>
     )
 }
