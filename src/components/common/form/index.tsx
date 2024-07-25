@@ -25,7 +25,8 @@ export const TextInputField = ({ control, type = "text", name, errMsg = null }: 
                 type={type}
                 autoComplete={name}
                 {...field}
-                className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-600"
+                className="mt-1 w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+
             />
             <span className="text-red-500 text-sm">{errMsg}</span>
         </div>
