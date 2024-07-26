@@ -1,96 +1,124 @@
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { NavLink } from 'react-router-dom';
+import {  useContext, useState } from "react";
+import {
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
+    Transition,
+} from '@headlessui/react';
 
-const navigation = [
-    { name: 'Dashboard', href: '#', current: false },
-    { name: 'Team', href: '#', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
-];
+import { HiBars3, HiChevronDown } from "react-icons/hi2";
+import { LogoComponent } from "../image";
+import { NavLink } from "react-router-dom";
 
-function classNames(...classes: any) {
+import AuthContext from "../../../context/auth.context";
+import MobileMenu from "./mobile-menu.component";
+
+
+
+export function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ');
 }
 
 const HeaderComponent = (): JSX.Element => {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const auth = useContext(AuthContext);
+
     return (
         <>
-            <Disclosure as="nav" className="bg-blue-400 overflow-hidden">
-                <div className="mx-auto max-w-full px-2 sm:px-6 lg:px-8">
-                    <div className="relative flex h-16 items-center justify-between">
-                        <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                            {/* Mobile menu button */}
-                            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                                <span className="absolute -inset-0.5" />
-                                <span className="sr-only">Open main menu</span>
-                                <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
-                                <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
-                            </DisclosureButton>
-                        </div>
-                        <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                            <div className="flex flex-shrink-0 items-center">
-                                <img
-                                    alt="Your Company"
-                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                    className="h-8 w-auto"
-                                />
-                            </div>
-                            <div className="hidden sm:ml-6 sm:block">
-                                <div className="flex space-x-4">
-                                    {navigation.map((item) => (
-                                        <a
-                                            key={item.name}
-                                            href={item.href}
-                                            aria-current={item.current ? 'page' : undefined}
-                                            className={classNames(
-                                                item.current ? 'bg-gray-900 text-white' : 'text-gray-800 hover:bg-gray-400 hover:text-white',
-                                                'rounded-md px-3 py-2 text-base font-medium', // Changed to text-base for consistency
-                                            )}
-                                        >
-                                            {item.name}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mx-3">
-                            <NavLink
-                                to="/register"
-                                className="bg-blue-500 text-gray-800 font-medium py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mr-2 text-base"
-                            >
-                                Register
-                            </NavLink>
-                            <NavLink
-                                to="/login"
-                                className="bg-green-500 text-gray-800 font-medium py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-base"
-                            >
-                                Login
-                            </NavLink>
-                        </div>
-
+            <header className="bg-blue-400">
+                <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+                    <LogoComponent />
+                    <div className="flex lg:hidden">
+                        <button
+                            type="button"
+                            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                            onClick={() => setMobileMenuOpen(true)}
+                        >
+                            <span className="sr-only">Open main menu</span>
+                            <HiBars3 className="h-6 w-6" aria-hidden="true" />
+                        </button>
                     </div>
-                </div>
+                    <PopoverGroup className="hidden lg:flex lg:gap-x-12">
+                        <Popover className="relative">
+                            <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+                                Categories
+                                <HiChevronDown className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+                            </PopoverButton>
 
-                <DisclosurePanel className="sm:hidden">
-                    <div className="space-y-1 px-2 pb-3 pt-2">
-                        {navigation.map((item) => (
-                            <DisclosureButton
-                                key={item.name}
-                                as="a"
-                                href={item.href}
-                                aria-current={item.current ? 'page' : undefined}
-                                className={classNames(
-                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                    'block rounded-md px-3 py-2 text-base font-medium', // Consistent font size
-                                )}
+                            <Transition
+                                enter="transition ease-out duration-200"
+                                enterFrom="opacity-0 translate-y-1"
+                                enterTo="opacity-100 translate-y-0"
+                                leave="transition ease-in duration-150"
+                                leaveFrom="opacity-100 translate-y-0"
+                                leaveTo="opacity-0 translate-y-1"
                             >
-                                {item.name}
-                            </DisclosureButton>
-                        ))}
+                                <PopoverPanel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                                    <div className="p-4">
+                                        <div className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50">
+                                            <div className="flex-auto">
+                                                <NavLink to={'/'} className="block font-semibold text-gray-900">
+                                                    Electronics
+                                                    <span className="absolute inset-0" />
+                                                </NavLink>
+                                            </div>
+                                        </div>
+                                        <div className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50">
+                                            <div className="flex-auto">
+                                                <NavLink to={'/'} className="block font-semibold text-gray-900">
+                                                    Clothings
+                                                    <span className="absolute inset-0" />
+                                                </NavLink>
+                                            </div>
+                                        </div>
+                                        <div className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50">
+                                            <div className="flex-auto">
+                                                <NavLink to={'/'} className="block font-semibold text-gray-900">
+                                                    Smart Phones
+                                                    <span className="absolute inset-0" />
+                                                </NavLink>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </PopoverPanel>
+                            </Transition>
+                        </Popover>
+
+                        <NavLink to={"/features"} className="text-sm font-semibold leading-6 text-gray-900">
+                            Features
+                        </NavLink>
+                        <NavLink to={"/policy"} className="text-sm font-semibold leading-6 text-gray-900">
+                            Policy
+                        </NavLink>
+                        <NavLink to={"/about"} className="text-sm font-semibold leading-6 text-gray-900">
+                            About Us
+                        </NavLink>
+                    </PopoverGroup>
+                    <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                        {auth.loggedInUser ? (
+                            <>
+                                <NavLink to={'/' + auth.loggedInUser.role} className="text-sm font-semibold leading-6 text-gray-900 mr-5">
+                                    {auth.loggedInUser.name} <span aria-hidden="true">&rarr;</span>
+                                </NavLink>
+                                <NavLink to="/logout" className="text-sm font-semibold leading-6 text-gray-900">
+                                    Log Out <span aria-hidden="true">&rarr;</span>
+                                </NavLink>
+                            </>
+                        ) : (
+                            <>
+                                <NavLink to={"/register"} className="text-sm font-semibold leading-6 text-gray-900 mr-5">
+                                    Register <span aria-hidden="true">&rarr;</span>
+                                </NavLink>
+                                <NavLink to={"/login"} className="text-sm font-semibold leading-6 text-gray-900">
+                                    Log In <span aria-hidden="true">&rarr;</span>
+                                </NavLink>
+                            </>
+                        )}
                     </div>
-                </DisclosurePanel>
-            </Disclosure>
+                </nav>
+                <MobileMenu mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
+            </header>
         </>
     );
 }
