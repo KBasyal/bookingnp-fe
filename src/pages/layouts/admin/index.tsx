@@ -6,7 +6,7 @@ import {
 import { HiBars3, HiXMark } from 'react-icons/hi2'
 
 import { NavLink, Outlet } from 'react-router-dom'
-import { FaGear, FaImages } from 'react-icons/fa6'
+import { FaF, FaGear, FaH, FaImages, FaR } from 'react-icons/fa6'
 import { FaHome } from 'react-icons/fa'
 import { LogoComponent } from '../../../components/common/image'
 
@@ -116,6 +116,49 @@ const AdminLayout = () => {
                                                 className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
                                             >
                                                 Banners
+                                            </span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            to="/admin/hotel"
+                                            className="group relative flex justify-center rounded px-2 py-1.5 text-black hover:bg-gray-50 hover:text-gray-700"
+                                        >
+                                            <FaH/>
+
+                                            <span
+                                                className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                                            >
+                                                Hotels
+                                            </span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            to="/admin/facility"
+                                            className="group relative flex justify-center rounded px-2 py-1.5 text-black hover:bg-gray-50 hover:text-gray-700"
+                                        >
+                                            <FaF/>
+
+                                            <span
+                                                className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                                            >
+                                                Facility
+                                            </span>
+                                        </NavLink>
+                                    </li>
+
+                                    <li>
+                                        <NavLink
+                                            to="/admin/room"
+                                            className="group relative flex justify-center rounded px-2 py-1.5 text-black hover:bg-gray-50 hover:text-gray-700"
+                                        >
+                                            <FaR/>
+
+                                            <span
+                                                className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                                            >
+                                                Room
                                             </span>
                                         </NavLink>
                                     </li>
