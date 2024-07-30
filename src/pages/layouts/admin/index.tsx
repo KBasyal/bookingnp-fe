@@ -6,7 +6,7 @@ import {
 import { HiBars3, HiXMark } from 'react-icons/hi2'
 
 import { NavLink, Outlet } from 'react-router-dom'
-import { FaF, FaGear, FaH, FaImages, FaR } from 'react-icons/fa6'
+import { FaF, FaGear, FaH, FaHotel, FaImages, FaR } from 'react-icons/fa6'
 import { FaHome } from 'react-icons/fa'
 import { LogoComponent } from '../../../components/common/image'
 
@@ -154,6 +154,20 @@ const AdminLayout = () => {
                                             className="group relative flex justify-center rounded px-2 py-1.5 text-black hover:bg-gray-50 hover:text-gray-700"
                                         >
                                             <FaR/>
+
+                                            <span
+                                                className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                                            >
+                                                Room
+                                            </span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            to="/admin/hotel-facility"
+                                            className="group relative flex justify-center rounded px-2 py-1.5 text-black hover:bg-gray-50 hover:text-gray-700"
+                                        >
+                                            <FaHotel/>
 
                                             <span
                                                 className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"

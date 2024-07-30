@@ -14,15 +14,11 @@ import PermissionConfig from "./permission.config";
 import AdminLayout from "../pages/layouts/admin";
 import { LoadingComponent } from "../components/common";
 import AdminDashboard from "../pages/dashboard/admin-dashboard.page";
-import {AdminBanner, AdminBannerCreate, AdminBannerEdit} from "../pages/banner"
-import {AdminHotel, AdminHotelCreate,AdminHotelEdit}   from "../pages/hotel"
+import { AdminBanner, AdminBannerCreate, AdminBannerEdit } from "../pages/banner"
+import { AdminHotel, AdminHotelCreate, AdminHotelEdit } from "../pages/hotel"
 import { AdminFacility, AdminFacilityCreate, AdminFacilityEdit } from "../pages/facility";
-import {AdminRoomCreate, AdminRoomEdit, AdminRoomList} from "../pages/room"
-   
-
-
-
-
+import { AdminRoomCreate, AdminRoomEdit, AdminRoomList } from "../pages/room"
+import { AdminHotelFacility, AdminHotelFacilityCreate, AdminHotelFacilityEdit } from "../pages/hotel-facility";
 
 const RoutingConfig = () => {
     const [loggedInUser, setLoggedInUser] = useState();
@@ -89,31 +85,42 @@ const RoutingConfig = () => {
                             <AdminHotel />
                         </Suspense>}></Route>
                         <Route path="hotel/create" element={<Suspense fallback={<LoadingComponent />}>
-                           
-                            <AdminHotelCreate/>
+
+                            <AdminHotelCreate />
                         </Suspense>} />
                         <Route path="hotel/:id" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminHotelEdit/>
+                            <AdminHotelEdit />
                         </Suspense>} />
                         <Route path="facility" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminFacility/>
+                            <AdminFacility />
                         </Suspense>}></Route>
                         <Route path="facility/create" element={<Suspense fallback={<LoadingComponent />}>
-                           
-                            <AdminFacilityCreate/>
+
+                            <AdminFacilityCreate />
                         </Suspense>} />
                         <Route path="facility/:id" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminFacilityEdit/>
+                            <AdminFacilityEdit />
                         </Suspense>} />
                         <Route path="room" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminRoomList/>
+                            <AdminRoomList />
                         </Suspense>}></Route>
                         <Route path="room/create" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminRoomCreate/>
+                            <AdminRoomCreate />
                         </Suspense>} />
                         <Route path="room/:id" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminRoomEdit/>
+                            <AdminRoomEdit />
                         </Suspense>} />
+                        <Route path="hotel-facility" element={<Suspense fallback={<LoadingComponent />}>
+
+                            <AdminHotelFacility />
+                        </Suspense>} />
+                        <Route path="hotel-facility/create" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminHotelFacilityCreate />
+                        </Suspense>} />
+                        <Route path="hotel-facility/:id" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminHotelFacilityEdit/>
+                        </Suspense>} />
+
 
                     </Route>
 
