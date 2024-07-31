@@ -19,6 +19,7 @@ import { AdminHotel, AdminHotelCreate, AdminHotelEdit } from "../pages/hotel"
 import { AdminFacility, AdminFacilityCreate, AdminFacilityEdit } from "../pages/facility";
 import { AdminRoomCreate, AdminRoomEdit, AdminRoomList } from "../pages/room"
 import { AdminHotelFacility, AdminHotelFacilityCreate, AdminHotelFacilityEdit } from "../pages/hotel-facility";
+import { AdminRoomFacility, AdminRoomFacilityCreate, AdminRoomFacilityEdit } from "../pages/room-facility";
 
 const RoutingConfig = () => {
     const [loggedInUser, setLoggedInUser] = useState();
@@ -118,7 +119,17 @@ const RoutingConfig = () => {
                             <AdminHotelFacilityCreate />
                         </Suspense>} />
                         <Route path="hotel-facility/:id" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminHotelFacilityEdit/>
+                            <AdminHotelFacilityEdit />
+                        </Suspense>} />
+
+                        <Route path="room-facility" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminRoomFacility/>
+                        </Suspense>} />
+                        <Route path="room-facility/create" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminRoomFacilityCreate/>
+                        </Suspense>} />
+                        <Route path="room-facility/:id" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminRoomFacilityEdit/>
                         </Suspense>} />
 
 
