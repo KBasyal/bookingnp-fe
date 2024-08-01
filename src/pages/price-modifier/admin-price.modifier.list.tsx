@@ -4,11 +4,10 @@ import { toast } from "react-toastify";
 import axiosInstance from "../../config/axios.config";
 import TableActionButtons from "../../components/common/table/action-buttons.component";
 import { LoadingComponent } from "../../components/common";
-import PaginationComponent from "../../components/common/table/pagination.component";
 
 const PER_PAGE_LIMIT = 15;
 
-const AdminHotelFacility = () => {
+const AdminPriceModifier = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [pagination, setPagination] = useState({
@@ -18,7 +17,7 @@ const AdminHotelFacility = () => {
     const getHotelFacilityList = async ({ page = 1, limit = PER_PAGE_LIMIT }) => {
         try {
             setLoading(true);
-            const response: any = await axiosInstance.get('/hotel-facility', {
+            const response: any = await axiosInstance.get('/price-modifier', {
                 params: {
                     page: page,
                     limit: limit
@@ -28,10 +27,11 @@ const AdminHotelFacility = () => {
                 }
             });
 
-            const facilities: any = await Promise.all(response.result.map(async (item: any) => {
+            console.log("the response is:", response)
+            const details: any = await Promise.all(response.result.map(async (item: any) => {
 
-                const [facilityRes, hotelRes]:any = await Promise.all([
-                    axiosInstance.get(`/facility/${item.facility_id}`, {
+                const [roomRes, hotelRes]:any = await Promise.all([
+                    axiosInstance.get(`/room/${item.room_id}`, {
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("accessToken")
                         }
@@ -44,16 +44,15 @@ const AdminHotelFacility = () => {
                 ]);
                 return {
                     ...item,
-                    facilityName: facilityRes.result.name,
+                    room_id: roomRes.result._id,
                     hotelName: hotelRes.result.name
                 };
             }));
-
             setPagination({
                 totalPages: Math.ceil(response.meta.total / response.meta.limit),
                 currentPage: response.meta.page
             });
-            setData(facilities);
+            setData(details);
         } catch (error) {
             toast.error("Unable to fetch the hotel facility list.");
             console.error(error);
@@ -67,10 +66,11 @@ const AdminHotelFacility = () => {
     }, []);
 
 
-    const deleteHotelFacility = async (id: string) => {
+    const 
+    deletePriceModifier = async (id: string) => {
         try {
             setLoading(true);
-            await axiosInstance.delete('/hotel-facility/' + id, {
+            await axiosInstance.delete('/price-modifier/' + id, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("accessToken")
                 }
@@ -90,13 +90,13 @@ const AdminHotelFacility = () => {
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-16">
                     <div className="col-span-full lg:col-span-1">
                         <h1 className="text-4xl font-bold text-center lg:text-left">
-                            Hotel Facility List
+                            Price Modifier List
                         </h1>
                     </div>
                     <div></div>
                     <div className="col-span-full lg:col-span-1 flex justify-center lg:justify-end">
-                        <NavLink className="bg-green-800 mt-3 text-center py-2 px-2 text-white rounded w-[200px]" to="/admin/hotel-facility/create">
-                            Create Hotel Facility
+                        <NavLink className="bg-green-800 mt-3 text-center py-2 px-2 text-white rounded w-[200px]" to="/admin/price-modifier/create">
+                            Create Price Modifier
                         </NavLink>
                     </div>
                 </div>
@@ -106,17 +106,24 @@ const AdminHotelFacility = () => {
                             <thead className="ltr:text-left rtl:text-right bg-black">
                                 <tr>
                                     <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                                        Facility Name
-                                    </th>
-                                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
                                         Hotel Name
                                     </th>
                                     <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                                        Included
+                                        Room ID
                                     </th>
                                     <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                                        Price Impact
+                                        Type
                                     </th>
+                                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                                        Valid From
+                                    </th>
+                                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                                        Valid To
+                                    </th>
+                                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                                        Discount
+                                    </th>
+
                                     <th className="whitespace-nowrap px-4 py-2 font-medium text-white"></th>
                                 </tr>
                             </thead>
@@ -128,18 +135,23 @@ const AdminHotelFacility = () => {
                                         </td>
                                     </tr>
                                 ) : (
-                                    data.map((hotelfacility: any, index: number) => (
+                                    data.map((pricemodifier: any, index: number) => (
                                         <tr className="odd:bg-gray-50" key={index}>
-                                            <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{hotelfacility.facilityName}</td>
-                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{hotelfacility.hotelName}</td>
-                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{hotelfacility.priceImpact}</td>
-                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{hotelfacility.isincluded}</td>
+                                            <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{pricemodifier.hotelName}</td>
+                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{pricemodifier.room_id}</td>
+                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{pricemodifier.type}</td>
+                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{pricemodifier.applicableFrom}</td>
+                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{pricemodifier.applicableTo}</td>
+                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{pricemodifier.priceImpact}</td>
+                                            <td className="whitespace-nowrap px-4 py-2 font-medium">{pricemodifier.percentage}</td>
+
                                             <td className="whitespace-nowrap px-4 py-2 font-medium">
                                                 <TableActionButtons
-                                                    editUrl={"" + hotelfacility._id}
-                                                    rowId={hotelfacility._id as string}
-                                                    deleteAction={deleteHotelFacility}
-
+                                                    editUrl={"" + pricemodifier._id}
+                                                    rowId={pricemodifier._id as string}
+                                                    deleteAction={
+                                                        deletePriceModifier
+                                                    }
                                                 />
                                             </td>
                                         </tr>
@@ -149,12 +161,12 @@ const AdminHotelFacility = () => {
                             </tbody>
                         </table>
                     </div>
-                    {!loading && (
+                    {/* {!loading && (
                         <PaginationComponent
                             fetchCall={getHotelFacilityList}
                             pagination={pagination}
                         />
-                    )}
+                    )} */}
                 </div>
 
 
@@ -163,4 +175,4 @@ const AdminHotelFacility = () => {
     );
 };
 
-export default AdminHotelFacility;
+export default AdminPriceModifier;

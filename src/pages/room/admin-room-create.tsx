@@ -67,7 +67,7 @@ const AdminRoomCreate = () => {
         const fetchHotels = async () => {
             try {
                 setLoading(true);
-                const response = await axiosInstance.get('/hotel', {
+                const response:any = await axiosInstance.get('/hotel', {
                     params: { page: 1, limit: 100 }, // Adjust limit as needed
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("accessToken")

@@ -1,7 +1,7 @@
 
 import Select from 'react-select';
 
-const SelectRoomComponent = ({ options, value, onChange, errMsg, isDisabled }:any) => {
+const SelectRoomComponent = ({ options, value, onChange, errMsg, isDisabled, placeholder }:any) => {
     return (
         <div>
             <Select
@@ -9,7 +9,7 @@ const SelectRoomComponent = ({ options, value, onChange, errMsg, isDisabled }:an
                 value={options.find((option: { value: any; }) => option.value === value)}
                 onChange={onChange}
                 isDisabled={isDisabled}
-                placeholder="Select a room..."
+                placeholder={placeholder}
                 className="basic-single"
                 classNamePrefix="select"
             />
