@@ -21,6 +21,7 @@ import { AdminRoomCreate, AdminRoomEdit, AdminRoomList } from "../pages/room"
 import { AdminHotelFacility, AdminHotelFacilityCreate, AdminHotelFacilityEdit } from "../pages/hotel-facility";
 import { AdminRoomFacility, AdminRoomFacilityCreate, AdminRoomFacilityEdit } from "../pages/room-facility";
 import { AdminPriceModifier, AdminPriceModifierCreate, AdminPriceModifierEdit } from "../pages/price-modifier";
+import RoomComponent from "../components/home/hotelrooms";
 
 
 const RoutingConfig = () => {
@@ -61,10 +62,12 @@ const RoutingConfig = () => {
                 />
                 <Routes>
                     <Route path="/" element={<HomeLayout />}>
+
                         <Route index element={<LandingPage />}></Route>
                         <Route path="register" element={<RegisterPage />} />
                         <Route path="activate/:token" element={<ActivateUser />} />
                         <Route path="login" element={<LoginPage />} />
+                        <Route path="/room/home-list/:id" element={<RoomComponent />} />
                         <Route path="*" element={<>Error Page</>} />
                     </Route>
                     <Route path="/admin" element={<PermissionConfig allowAccess="admin">

@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { useEffect, useState } from "react";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "../../../config/axios.config";
 
 const HomeBannerComponent = () => {
     const settings = {
