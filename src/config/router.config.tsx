@@ -22,6 +22,8 @@ import { AdminHotelFacility, AdminHotelFacilityCreate, AdminHotelFacilityEdit } 
 import { AdminRoomFacility, AdminRoomFacilityCreate, AdminRoomFacilityEdit } from "../pages/room-facility";
 import { AdminPriceModifier, AdminPriceModifierCreate, AdminPriceModifierEdit } from "../pages/price-modifier";
 import RoomComponent from "../components/home/hotelrooms";
+import AdminBooking from "../pages/booking/admin-booking.list";
+import AdminBookingCreate from "../pages/booking/admin-booking.create";
 
 
 const RoutingConfig = () => {
@@ -144,6 +146,12 @@ const RoutingConfig = () => {
                         </Suspense>} />
                         <Route path="price-modifier/:id" element={<Suspense fallback={<LoadingComponent />}>
                             <AdminPriceModifierEdit/>
+                        </Suspense>} />
+                        <Route path="booking" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminBooking/>
+                        </Suspense>} />
+                        <Route path="booking/create" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminBookingCreate/>                        
                         </Suspense>} />
 
 
