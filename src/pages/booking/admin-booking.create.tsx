@@ -226,7 +226,7 @@ const AdminBookingCreate = () => {
             });
 
             toast.success("Booking created and room status updated successfully.");
-            navigate("/admin/bookings");
+            navigate("/admin/booking");
         } catch (exception) {
             console.error("Error while creating booking:", exception);
             toast.error("Error while creating booking");

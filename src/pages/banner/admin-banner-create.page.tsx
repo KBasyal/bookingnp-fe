@@ -40,7 +40,7 @@ const AdminBannerCreate = () => {
                 }
             });
             toast.success("Banner created successfully.");
-            navigate("/admin/banner");
+            navigate("/admin/about");
         } catch (exception) {
             console.log(exception);
             toast.error("Error while creating banner");

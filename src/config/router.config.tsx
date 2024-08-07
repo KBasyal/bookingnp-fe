@@ -21,9 +21,12 @@ import { AdminRoomCreate, AdminRoomEdit, AdminRoomList } from "../pages/room"
 import { AdminHotelFacility, AdminHotelFacilityCreate, AdminHotelFacilityEdit } from "../pages/hotel-facility";
 import { AdminRoomFacility, AdminRoomFacilityCreate, AdminRoomFacilityEdit } from "../pages/room-facility";
 import { AdminPriceModifier, AdminPriceModifierCreate, AdminPriceModifierEdit } from "../pages/price-modifier";
+import {AdminAbout, AdminAboutCreate, AdminAboutEdit} from "../pages/about/index"
 import RoomComponent from "../components/home/hotelrooms";
 import AdminBooking from "../pages/booking/admin-booking.list";
 import AdminBookingCreate from "../pages/booking/admin-booking.create";
+import HomeHotelBooking from "../components/home/booking";
+import About from "../components/home/about";
 
 
 const RoutingConfig = () => {
@@ -69,7 +72,9 @@ const RoutingConfig = () => {
                         <Route path="register" element={<RegisterPage />} />
                         <Route path="activate/:token" element={<ActivateUser />} />
                         <Route path="login" element={<LoginPage />} />
+                        <Route path="about" element={<About/>} />
                         <Route path="/room/home-list/:id" element={<RoomComponent />} />
+                        <Route path="/room/home-list/:hotel_id/:room_id/book" element={<HomeHotelBooking />} />
                         <Route path="*" element={<>Error Page</>} />
                     </Route>
                     <Route path="/admin" element={<PermissionConfig allowAccess="admin">
@@ -152,6 +157,15 @@ const RoutingConfig = () => {
                         </Suspense>} />
                         <Route path="booking/create" element={<Suspense fallback={<LoadingComponent />}>
                             <AdminBookingCreate/>                        
+                        </Suspense>} />
+                        <Route path="about" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminAbout/>
+                        </Suspense>} />
+                        <Route path="about/create" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminAboutCreate/>
+                        </Suspense>} />
+                        <Route path="about/:id" element={<Suspense fallback={<LoadingComponent />}>
+                            <AdminAboutEdit/>
                         </Suspense>} />
 
 

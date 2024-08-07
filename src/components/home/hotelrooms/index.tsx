@@ -1,18 +1,16 @@
-
-
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../config/axios.config";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const RoomComponent = () => {
-    const { id } = useParams();
-    console.log("The selected hotel id is:", id);
+    const { id: hotel_id } = useParams(); // Extract hotel_id from URL parameters
+    const navigate = useNavigate(); // Initialize useNavigate
     const [data, setData] = useState([] as any[]);
 
     const getRoomsForHotel = async () => {
         try {
             const response: any = await axiosInstance.get('/room/home-list', {
-                params: { hotel_id: id },
+                params: { hotel_id },
             });
             console.log("API Response:", response);
             setData(response.result);
@@ -23,20 +21,18 @@ const RoomComponent = () => {
 
     useEffect(() => {
         getRoomsForHotel();
-    }, [id]);
+    }, [hotel_id]);
 
     const isAuthenticated = () => {
-        // Check if the user is authenticated (e.g., by checking for a token)
-        return !!localStorage.getItem("authToken");
+        return !!localStorage.getItem("accessToken");
     };
 
-    const handleBookNowClick = () => {
+    const handleBookNowClick = (roomId: string) => {
         if (isAuthenticated()) {
-            // Proceed with the booking process
-            console.log("User is authenticated. Proceed with booking.");
+            navigate(`/room/home-list/${hotel_id}/${roomId}/book/`); // Include both hotel_id and roomId in URL
         } else {
             // Redirect to login page
-            window.location.href = "/login"; // Redirect to login page
+            navigate("/login");
         }
     };
 
@@ -49,7 +45,7 @@ const RoomComponent = () => {
                     {data
                         .filter((room: any) => room.isBooked !== 'booked') // Filter out rooms where isBooked is 'booked'
                         .map((room: any) => (
-                            <div key={room.id} className="group block overflow-hidden rounded-lg shadow-lg">
+                            <div key={room._id} className="group block overflow-hidden rounded-lg shadow-lg">
                                 <div className="relative w-full h-64 sm:h-72">
                                     <img
                                         src={`${import.meta.env.VITE_IMAGE_URL}/rooms/${room.image}`}
@@ -64,7 +60,7 @@ const RoomComponent = () => {
                                     <p className="mt-1.5 text-sm text-gray-700">Id: {room._id}</p>
                                     <button
                                         className="mt-4 block w-full rounded bg-yellow-400 py-2 text-sm font-medium transition-transform hover:scale-105"
-                                        onClick={handleBookNowClick}
+                                        onClick={() => handleBookNowClick(room._id)} // Pass room ID to handler
                                     >
                                         Book Now
                                     </button>
@@ -78,4 +74,3 @@ const RoomComponent = () => {
 };
 
 export default RoomComponent;
-
