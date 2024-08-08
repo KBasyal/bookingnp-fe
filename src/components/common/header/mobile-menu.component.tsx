@@ -8,19 +8,19 @@ import {
 import { LogoComponent } from "../image";
 import { classNames } from ".";
 
-import {  HiChevronDown, HiXMark } from "react-icons/hi2"
+import { HiChevronDown, HiXMark } from "react-icons/hi2";
 
-import { NavLink } from "react-router-dom"
-
+import { NavLink } from "react-router-dom";
 
 interface MobileMenuProps {
     mobileMenuOpen: boolean,
     setMobileMenuOpen: any
 }
+
 const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }: MobileMenuProps) => {
     return (
         <>
-            <Dialog className="lg:hidden " open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+            <Dialog className="lg:hidden" open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
                 <div className="fixed inset-0 z-10" />
                 <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-red-50 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
@@ -36,7 +36,7 @@ const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }: MobileMenuProps) => {
                     </div>
                     <div className="mt-6 flow-root">
                         <div className="-my-6 divide-y divide-gray-500/10">
-                            <div className="space-y-2 py-6">
+                            <div className="space-y-1 py-6"> {/* Reduced space-y */}
                                 <Disclosure as="div" className="-mx-3">
                                     {({ open }) => (
                                         <>
@@ -47,32 +47,41 @@ const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }: MobileMenuProps) => {
                                                     aria-hidden="true"
                                                 />
                                             </DisclosureButton>
-                                            <DisclosurePanel className="mt-2 space-y-2">
-
-                                                <NavLink
-                                                    to={'/'}
-                                                    className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                                >
-                                                    Electronics
-                                                </NavLink>
-                                                <NavLink
-                                                    to={'/'}
-                                                    className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                                >
-                                                    Clothings
-                                                </NavLink>                                                <NavLink
-                                                    to={'/'}
-                                                    className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                                >
-                                                    Smart Phones
-                                                </NavLink>
-
+                                            <DisclosurePanel className="mt-2 space-y-1"> {/* Reduced space-y */}
+                                                {[
+                                                    "Luxury Hotel",
+                                                    "Boutique Hotel",
+                                                    "Resort Hotel",
+                                                    "Business Hotel",
+                                                    "Airport Hotel",
+                                                    "Extended Stay Hotel",
+                                                    "Bed and Breakfast",
+                                                    "Motel",
+                                                    "Inn",
+                                                    "Hostel",
+                                                    "Eco Hotel",
+                                                    "Apartment Hotel",
+                                                    "Casino Hotel",
+                                                    "Conference Hotel",
+                                                    "Family Hotel",
+                                                    "Historic Hotel",
+                                                    "Beach Hotel",
+                                                    "Ski Hotel"
+                                                ].map((category) => (
+                                                    <NavLink
+                                                        key={category}
+                                                        to={`/hotels/${category.replace(/\s+/g, '-').toLowerCase()}`}
+                                                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                                    >
+                                                        {category}
+                                                    </NavLink>
+                                                ))}
                                             </DisclosurePanel>
                                         </>
                                     )}
                                 </Disclosure>
                                 <NavLink
-                                    to={"/product-list"}
+                                    to={"/features"}
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Features
@@ -84,7 +93,7 @@ const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }: MobileMenuProps) => {
                                     Policy
                                 </NavLink>
                                 <NavLink
-                                    to={"/about-us"}
+                                    to={"/about"}
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     About Us
@@ -93,25 +102,23 @@ const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }: MobileMenuProps) => {
                             <div className="py-6">
                                 <NavLink
                                     to={"/register"}
-
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Register
                                 </NavLink>
                                 <NavLink
                                     to={"/login"}
-
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
-                                    Log in
+                                    Log In
                                 </NavLink>
                             </div>
                         </div>
                     </div>
                 </DialogPanel>
             </Dialog>
-
         </>
-    )
+    );
 }
+
 export default MobileMenu;

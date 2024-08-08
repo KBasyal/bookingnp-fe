@@ -1,35 +1,38 @@
+import AuthContext from "../../context/auth.context";
 import { useForm } from "react-hook-form";
-import { TextInputField, SelectOptionComponent } from "../../components/common/form";
+import { TextInputField } from "../../components/common/form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axiosInstance from "../../config/axios.config";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { LoadingComponent } from "../../components/common";
 
+const CustomerManageAccount = () => {
+    const [loading, setLoading] = useState(false);
+    const auth = useContext(AuthContext);
+    const { loggedInUser } = auth; // Destructure loggedInUser from context
 
-const AdminBannerEdit = () => {
-    let [loading, setLoading] = useState(true);
-
-    const params = useParams()
-    // const dispatch = useDispatch()
-    const [detail, setDetail] = useState({} as any)
-
-
+    const params = useParams();
 
     const editDTO = Yup.object({
-        title: Yup.string().min(3).required(),
-        link: Yup.string().url().required(),
-        status: Yup.object({
-            label: Yup.string().matches(/^(Publish|Unpublish)$/),
-            value: Yup.string().matches(/^(active|inactive)$/)
-        }).required(),
-        image: Yup.mixed().optional()
+        name: Yup.string().min(3).required(),
+        email: Yup.string().email().required(),
+        password: Yup.string().min(6).required(), // Assuming a minimum length for password
+        image: Yup.mixed().optional(),
+        role: Yup.string().oneOf(['staff', 'customer', 'admin']).required() // Role validation
     });
 
     const { control, handleSubmit, setValue, formState: { errors } } = useForm({
-        resolver: yupResolver(editDTO)
+        resolver: yupResolver(editDTO),
+        defaultValues: {
+            name: loggedInUser?.name || '',
+            email: loggedInUser?.email || '',
+            password: '', // Password should be empty on load
+            role: loggedInUser?.role || '', // Role field
+            image: loggedInUser?.image
+        }
     });
 
     const navigate = useNavigate();
@@ -41,17 +44,17 @@ const AdminBannerEdit = () => {
                 ...data,
                 status: data.status.value
             };
-            await axiosInstance.put('/banner/' + params.id, mappedData, {
+            await axiosInstance.put('/user/' + params.id, mappedData, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem('accessToken'),
                     "Content-Type": "multipart/form-data"
                 }
             });
-            toast.success("Banner updated successfully.");
+            toast.success("User updated successfully.");
             navigate("/admin/banner");
         } catch (exception) {
             console.log(exception);
-            toast.error("Error while creating banner");
+            toast.error("Error while updating user");
         } finally {
             setLoading(false);
         }
@@ -61,52 +64,6 @@ const AdminBannerEdit = () => {
         const uploaded = e.target.files[0];
         setValue('image', uploaded);
     };
-    const getBannerById = async () => {
-        try {
-            const response: any = await axiosInstance.get("/banner/" + params.id, {
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('accessToken')
-
-                }
-
-            })
-            console.log("response is", response)
-            setValue("title", response.result.title)
-            setValue("link", response.result.link)
-            setValue("status", {
-                label: response.result.status === 'active' ? 'Publish' : 'Unpublish',
-                value: response.result.status
-            })
-
-            setDetail(response.result as any)
-
-        } catch (exception) {
-            toast.error("Banner fetch error");
-            navigate("/admin/banner")
-
-        } finally {
-            setLoading(false)
-        }
-
-    }
-
-    useEffect(() => {
-
-        // const id = params.id
-        // if(!id){
-        //     toast.error("Banner Id is required")
-        // }else{
-        //     // dispatch(getBannerDetail(id))
-        //     // setLoading(false)
-
-        // }
-        getBannerById()
-
-    }, [params])
-    // const detail = useSelector((root: any)=>{
-    //     return root.banner.bannerDetail
-
-    // })
 
     return (
         <>
@@ -115,7 +72,7 @@ const AdminBannerEdit = () => {
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-16">
                         <div className="col-span-full lg:col-span-1">
                             <h1 className="text-4xl font-bold text-center lg:text-left">
-                                Banner Edit
+                                User Details
                             </h1>
                         </div>
                     </div>
@@ -123,46 +80,58 @@ const AdminBannerEdit = () => {
                     <div className="rounded-lg border border-gray-200 mt-8">
                         <div className="overflow-x-auto rounded-t-lg">
                             {
-                                loading ? <>
+                                loading ? (
                                     <LoadingComponent />
-                                </> : <>
+                                ) : (
                                     <form onSubmit={handleSubmit(submitEvent)} className="grid grid-cols-6 gap-6">
-                                        <div className="col-span-6 ">
-                                            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-
+                                        <div className="col-span-6">
+                                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                             </label>
                                             <TextInputField
                                                 control={control}
-                                                name="title"
-                                                errMsg={errors?.title?.message as string}
-                                                required={true} type={""} 
-                                            />
+                                                name="name"
+                                                errMsg={errors?.name?.message as string}
+                                                required={true} type={""} />
                                         </div>
 
                                         <div className="col-span-6">
-                                            <label htmlFor="link" className="block text-sm font-medium text-gray-700"> </label>
+                                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                            </label>
                                             <TextInputField
                                                 control={control}
-                                                name="link"
-                                                type="url"
-                                                errMsg={errors?.link?.message as string}
+                                                name="email"
+                                                type="email"
+                                                errMsg={errors?.email?.message as string}
                                                 required={true}
                                             />
                                         </div>
 
-                                        <div className="col-span-6 ">
-                                            <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-
+                                        {/* <div className="col-span-6">
+                                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                                Password
                                             </label>
-                                            <SelectOptionComponent
-                                                options={[{ label: "Publish", value: "active" }, { label: "Unpublish", value: "inactive" }]}
-                                                name="status"
+                                            <TextInputField
                                                 control={control}
-                                                errMsg={errors?.status?.message as string}
+                                                name="password"
+                                                type="password"
+                                                errMsg={errors?.password?.message as string}
+                                                required={true}
+                                            />
+                                        </div> */}
+
+                                        <div className="col-span-6">
+                                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                                                Role
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={loggedInUser?.role || ''}
+                                                readOnly
+                                                className="bg-gray-100 text-gray-500 border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50 block w-full sm:text-sm"
                                             />
                                         </div>
 
-                                        <div className="col-span-6 ">
+                                        <div className="col-span-6">
                                             <label htmlFor="image" className="block text-sm font-medium text-gray-700">
                                                 Image
                                             </label>
@@ -172,10 +141,11 @@ const AdminBannerEdit = () => {
                                                 type="file"
                                                 onChange={handleFileChange}
                                             />
-                                            <div className="block w-[25%">
-                                                <img src={import.meta.env.VITE_IMAGE_URL + "/uploads/banners/" + detail?.image} crossOrigin="anonymous"></img>
-
-                                            </div>
+                                            {loggedInUser?.image && (
+                                                <div className="block w-[25%]">
+                                                    <img src={`${import.meta.env.VITE_IMAGE_URL}/uploads/users/${loggedInUser.image}`} alt="User" crossOrigin="anonymous" />
+                                                </div>
+                                            )}
                                             <span className="text-red-500">{errors?.image?.message}</span>
                                         </div>
 
@@ -184,13 +154,12 @@ const AdminBannerEdit = () => {
                                                 className="inline-block shrink-0 rounded-md border border-green-700 bg-green-700 px-6 py-2 text-sm font-medium text-white transition hover:bg-transparent hover:text-green-500 focus:outline-none focus:ring active:text-green-600"
                                                 disabled={loading}
                                             >
-                                                Save Banner
+                                                Update User
                                             </button>
                                         </div>
                                     </form>
-                                </>
+                                )
                             }
-
                         </div>
                     </div>
                 </div>
@@ -199,4 +168,4 @@ const AdminBannerEdit = () => {
     );
 };
 
-export default AdminBannerEdit;
+export default CustomerManageAccount;

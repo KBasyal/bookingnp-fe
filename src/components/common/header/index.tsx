@@ -1,28 +1,37 @@
-import {  useContext, useState } from "react";
-import {
-    Popover,
-    PopoverButton,
-    PopoverGroup,
-    PopoverPanel,
-    Transition,
-} from '@headlessui/react';
 
+
+import { useContext, useState, useEffect } from "react";
+import { Popover, PopoverButton, PopoverGroup, PopoverPanel, Transition } from "@headlessui/react";
 import { HiBars3, HiChevronDown } from "react-icons/hi2";
 import { LogoComponent } from "../image";
 import { NavLink } from "react-router-dom";
-
 import AuthContext from "../../../context/auth.context";
 import MobileMenu from "./mobile-menu.component";
-
-
+import axiosInstance from "../../../config/axios.config";
+import useLogout from "../../common/logout/index"; // Import the useLogout hook
 
 export function classNames(...classes: any) {
-    return classes.filter(Boolean).join(' ');
+    return classes.filter(Boolean).join(" ");
 }
 
 const HeaderComponent = (): JSX.Element => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [types, setTypes] = useState<string[]>([]);
     const auth = useContext(AuthContext);
+    const logout = useLogout(); // Initialize the logout hook
+
+    useEffect(() => {
+        const fetchTypes = async () => {
+            try {
+                const response: any = await axiosInstance.get("hotel/type");
+                setTypes(response.result);
+                console.log("the type response is:", response);
+            } catch (error) {
+                console.log("Error fetching hotel types:", error);
+            }
+        };
+        fetchTypes();
+    }, []);
 
     return (
         <>
@@ -55,31 +64,18 @@ const HeaderComponent = (): JSX.Element => {
                                 leaveTo="opacity-0 translate-y-1"
                             >
                                 <PopoverPanel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                                    <div className="p-4">
-                                        <div className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50">
-                                            <div className="flex-auto">
-                                                <NavLink to={'/'} className="block font-semibold text-gray-900">
-                                                    Electronics
+                                    <div className="p-4 flex flex-wrap gap-2">
+                                        {types.map((type) => (
+                                            <div key={type} className="group relative flex-shrink-0">
+                                                <NavLink
+                                                    to={`/hotel/home-list/${type}`}
+                                                    className="block font-semibold text-gray-900 hover:bg-gray-50 px-4 py-2 rounded-lg"
+                                                >
+                                                    {type}
                                                     <span className="absolute inset-0" />
                                                 </NavLink>
                                             </div>
-                                        </div>
-                                        <div className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50">
-                                            <div className="flex-auto">
-                                                <NavLink to={'/'} className="block font-semibold text-gray-900">
-                                                    Clothings
-                                                    <span className="absolute inset-0" />
-                                                </NavLink>
-                                            </div>
-                                        </div>
-                                        <div className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50">
-                                            <div className="flex-auto">
-                                                <NavLink to={'/'} className="block font-semibold text-gray-900">
-                                                    Smart Phones
-                                                    <span className="absolute inset-0" />
-                                                </NavLink>
-                                            </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </PopoverPanel>
                             </Transition>
@@ -98,12 +94,12 @@ const HeaderComponent = (): JSX.Element => {
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                         {auth.loggedInUser ? (
                             <>
-                                <NavLink to={'/' + auth.loggedInUser.role} className="text-sm font-semibold leading-6 text-gray-900 mr-5">
+                                <NavLink to={`/${auth.loggedInUser.role}`} className="text-sm font-semibold leading-6 text-gray-900 mr-5">
                                     {auth.loggedInUser.name} <span aria-hidden="true">&rarr;</span>
                                 </NavLink>
-                                <NavLink to="/logout" className="text-sm font-semibold leading-6 text-gray-900">
+                                <button onClick={logout} className="text-sm font-semibold leading-6 text-gray-900">
                                     Log Out <span aria-hidden="true">&rarr;</span>
-                                </NavLink>
+                                </button>
                             </>
                         ) : (
                             <>
@@ -121,6 +117,6 @@ const HeaderComponent = (): JSX.Element => {
             </header>
         </>
     );
-}
+};
 
 export default HeaderComponent;

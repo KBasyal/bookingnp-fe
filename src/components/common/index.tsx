@@ -5,5 +5,6 @@ import LoadingComponent from "./loading";
 export{
     HeaderComponent,
     FooterComponent,
-    LoadingComponent
+    LoadingComponent,
+   
 }

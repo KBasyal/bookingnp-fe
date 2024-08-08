@@ -2,20 +2,22 @@ import { useController } from 'react-hook-form';
 import Select from 'react-select';
 
 interface TextInputProps {
-    type?: string;
     control: any;
     name: string;
+    type: string;
     errMsg?: string | null;
     required?: boolean;
+    className?: string; // Add className prop
+    disabled?: boolean; // Add disabled prop if needed
 }
 
-export const TextInputField = ({ control, type = "text", name, errMsg = null }: TextInputProps) => {
+export const TextInputField = ({ control, type = "text", name, errMsg = null, className, required = false, disabled = false }: TextInputProps) => {
     const { field } = useController({
         control: control,
         name: name,
     });
 
-    return (
+     return (
         <div className="col-span-6 sm:col-span-3">
             <label htmlFor={name} className="block text-sm font-medium text-gray-700 capitalize">
                 {name.replace(/([A-Z])/g, ' $1').trim()}
@@ -25,7 +27,8 @@ export const TextInputField = ({ control, type = "text", name, errMsg = null }: 
                 type={type}
                 autoComplete={name}
                 {...field}
-                className="mt-1 w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className={className || "mt-1 w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"}
+
 
             />
             <span className="text-red-500 text-sm">{errMsg}</span>

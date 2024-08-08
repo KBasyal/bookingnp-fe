@@ -21,12 +21,16 @@ import { AdminRoomCreate, AdminRoomEdit, AdminRoomList } from "../pages/room"
 import { AdminHotelFacility, AdminHotelFacilityCreate, AdminHotelFacilityEdit } from "../pages/hotel-facility";
 import { AdminRoomFacility, AdminRoomFacilityCreate, AdminRoomFacilityEdit } from "../pages/room-facility";
 import { AdminPriceModifier, AdminPriceModifierCreate, AdminPriceModifierEdit } from "../pages/price-modifier";
-import {AdminAbout, AdminAboutCreate, AdminAboutEdit} from "../pages/about/index"
+import { AdminAbout, AdminAboutCreate, AdminAboutEdit } from "../pages/about/index"
 import RoomComponent from "../components/home/hotelrooms";
 import AdminBooking from "../pages/booking/admin-booking.list";
 import AdminBookingCreate from "../pages/booking/admin-booking.create";
 import HomeHotelBooking from "../components/home/booking";
 import About from "../components/home/about";
+import HotelListByTypeComponent from "../components/home/category";
+import UserPage from "../pages/layouts/customer";
+import CustomerManageAccount from "../pages/customer/customer-manage.account";
+import CustomerDashboard from "../pages/dashboard/customer-dashboard.page";
 
 
 const RoutingConfig = () => {
@@ -72,7 +76,9 @@ const RoutingConfig = () => {
                         <Route path="register" element={<RegisterPage />} />
                         <Route path="activate/:token" element={<ActivateUser />} />
                         <Route path="login" element={<LoginPage />} />
-                        <Route path="about" element={<About/>} />
+                        {/* <Route path="logout" element={<LogoutComponent/>} /> */}
+                        <Route path="about" element={<About />} />
+                        <Route path="/hotel/home-list/:type" element={<HotelListByTypeComponent />} />
                         <Route path="/room/home-list/:id" element={<RoomComponent />} />
                         <Route path="/room/home-list/:hotel_id/:room_id/book" element={<HomeHotelBooking />} />
                         <Route path="*" element={<>Error Page</>} />
@@ -135,41 +141,56 @@ const RoutingConfig = () => {
                         </Suspense>} />
 
                         <Route path="room-facility" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminRoomFacility/>
+                            <AdminRoomFacility />
                         </Suspense>} />
                         <Route path="room-facility/create" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminRoomFacilityCreate/>
+                            <AdminRoomFacilityCreate />
                         </Suspense>} />
                         <Route path="room-facility/:id" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminRoomFacilityEdit/>
+                            <AdminRoomFacilityEdit />
                         </Suspense>} />
                         <Route path="price-modifier" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminPriceModifier/>
+                            <AdminPriceModifier />
                         </Suspense>} />
                         <Route path="price-modifier/create" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminPriceModifierCreate/>
+                            <AdminPriceModifierCreate />
                         </Suspense>} />
                         <Route path="price-modifier/:id" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminPriceModifierEdit/>
+                            <AdminPriceModifierEdit />
                         </Suspense>} />
                         <Route path="booking" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminBooking/>
+                            <AdminBooking />
                         </Suspense>} />
                         <Route path="booking/create" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminBookingCreate/>                        
+                            <AdminBookingCreate />
                         </Suspense>} />
                         <Route path="about" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminAbout/>
+                            <AdminAbout />
                         </Suspense>} />
                         <Route path="about/create" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminAboutCreate/>
+                            <AdminAboutCreate />
                         </Suspense>} />
                         <Route path="about/:id" element={<Suspense fallback={<LoadingComponent />}>
-                            <AdminAboutEdit/>
+                            <AdminAboutEdit />
                         </Suspense>} />
 
 
                     </Route>
+                    <Route path="/customer" element={<PermissionConfig allowAccess="customer">
+                        <UserPage />
+                    </PermissionConfig>}>
+                        <Route index element={
+                            <Suspense fallback={<LoadingComponent />}>
+                                <CustomerDashboard />
+                            </Suspense>
+                        } />
+                        <Route path="manage-account" element={<Suspense fallback={<LoadingComponent />}>
+                            <CustomerManageAccount />
+                        </Suspense>} />
+                    </Route>
+
+
+
 
 
                 </Routes>
